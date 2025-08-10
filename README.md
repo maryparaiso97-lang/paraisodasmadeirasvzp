@@ -365,6 +365,20 @@
                     removeFromCart(productId);
                 }
                 
+                // Increase quantity
+                if (e.target.classList.contains('increase-quantity') || e.target.closest('.increase-quantity')) {
+                    const button = e.target.classList.contains('increase-quantity') ? e.target : e.target.closest('.increase-quantity');
+                    const productId = parseInt(button.dataset.id);
+                    changeQuantity(productId, 1);
+                }
+                
+                // Decrease quantity
+                if (e.target.classList.contains('decrease-quantity') || e.target.closest('.decrease-quantity')) {
+                    const button = e.target.classList.contains('decrease-quantity') ? e.target : e.target.closest('.decrease-quantity');
+                    const productId = parseInt(button.dataset.id);
+                    changeQuantity(productId, -1);
+                }
+                
                 // Payment method selection
                 if (e.target.classList.contains('payment-method') || e.target.closest('.payment-method')) {
                     const button = e.target.classList.contains('payment-method') ? e.target : e.target.closest('.payment-method');
@@ -518,6 +532,22 @@
                 updateCart();
             }
         }
+        
+        // Change product quantity
+        function changeQuantity(productId, change) {
+            const item = cart.find(item => item.id === productId);
+            
+            if (item) {
+                item.quantity += change;
+                
+                // Remove if quantity reaches 0
+                if (item.quantity <= 0) {
+                    removeFromCart(productId);
+                } else {
+                    updateCart();
+                }
+            }
+        }
 
         // Update cart UI
         function updateCart() {
@@ -546,6 +576,15 @@
                         <p class="text-sm text-gray-600">R$ ${item.price.toFixed(2).replace('.', ',')} x ${item.quantity}</p>
                     </div>
                     <div class="flex items-center">
+                        <div class="flex items-center mr-4">
+                            <button class="decrease-quantity bg-gray-200 px-2 py-1 rounded-l hover:bg-gray-300" data-id="${item.id}">
+                                <i class="fas fa-minus text-xs"></i>
+                            </button>
+                            <span class="quantity-display bg-gray-100 px-3 py-1 text-center w-10">${item.quantity}</span>
+                            <button class="increase-quantity bg-gray-200 px-2 py-1 rounded-r hover:bg-gray-300" data-id="${item.id}">
+                                <i class="fas fa-plus text-xs"></i>
+                            </button>
+                        </div>
                         <span class="font-medium mr-4">R$ ${(item.price * item.quantity).toFixed(2).replace('.', ',')}</span>
                         <button class="remove-item text-red-500 hover:text-red-700" data-id="${item.id}">
                             <i class="fas fa-trash"></i>
