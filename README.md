@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -331,9 +331,22 @@
                 productCard.innerHTML = `
                     <div class="p-4">
                         <h3 class="font-semibold text-lg text-gray-800 mb-1">${product.name}</h3>
-                        <p class="text-green-600 font-bold mb-3">R$ ${product.price.toFixed(2).replace('.', ',')}${product.unit ? ` / ${product.unit}` : ''}</p>
-                        <div class="flex items-center justify-between">
-                            <button class="add-to-cart bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition" data-id="${product.id}">
+                        <p class="text-green-600 font-bold mb-1">R$ ${product.price.toFixed(2).replace('.', ',')}${product.unit ? ` / ${product.unit}` : ''}</p>
+                        ${['Telhas', 'Tijolos', 'Blocos'].includes(product.category) ? 
+                          `<p class="text-green-800 text-sm mb-3">R$ ${(product.price * 1000).toFixed(2).replace('.', ',')} / 1000 un</p>` : 
+                          ''}
+                        <div class="flex flex-col space-y-2">
+                            ${['Telhas', 'Tijolos', 'Blocos'].includes(product.category) ? `
+                            <div class="flex items-center space-x-2">
+                                <button class="quantity-option bg-gray-200 px-3 py-1 rounded hover:bg-gray-300 ${product.unit ? 'w-full' : ''}" data-id="${product.id}" data-quantity="1">
+                                    Unidade: R$ ${product.price.toFixed(2).replace('.', ',')}
+                                </button>
+                                <button class="quantity-option bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700" data-id="${product.id}" data-quantity="1000">
+                                    1000 un: R$ ${(product.price * 1000).toFixed(2).replace('.', ',')}
+                                </button>
+                            </div>
+                            ` : ''}
+                            <button class="add-to-cart bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition w-full" data-id="${product.id}" data-quantity="1">
                                 <i class="fas fa-cart-plus mr-1"></i> Adicionar
                             </button>
                         </div>
@@ -352,10 +365,31 @@
 
             // Add to cart buttons (delegated event)
             document.addEventListener('click', function(e) {
+                // Quantity option selection
+                if (e.target.classList.contains('quantity-option') || e.target.closest('.quantity-option')) {
+                    const button = e.target.classList.contains('quantity-option') ? e.target : e.target.closest('.quantity-option');
+                    const productId = parseInt(button.dataset.id);
+                    const quantity = parseInt(button.dataset.quantity);
+                    
+                    // Update the add to cart button quantity
+                    const addButton = button.closest('.flex-col').querySelector('.add-to-cart');
+                    addButton.dataset.quantity = quantity;
+                    
+                    // Highlight selected option
+                    button.closest('.flex').querySelectorAll('.quantity-option').forEach(btn => {
+                        btn.classList.remove('bg-green-600', 'text-white', 'hover:bg-green-700');
+                        btn.classList.add('bg-gray-200', 'hover:bg-gray-300');
+                    });
+                    button.classList.remove('bg-gray-200', 'hover:bg-gray-300');
+                    button.classList.add('bg-green-600', 'text-white', 'hover:bg-green-700');
+                }
+                
+                // Add to cart
                 if (e.target.classList.contains('add-to-cart') || e.target.closest('.add-to-cart')) {
                     const button = e.target.classList.contains('add-to-cart') ? e.target : e.target.closest('.add-to-cart');
                     const productId = parseInt(button.dataset.id);
-                    addToCart(productId);
+                    const quantity = parseInt(button.dataset.quantity);
+                    addToCart(productId, quantity);
                 }
                 
                 // Remove item from cart
@@ -492,20 +526,20 @@
         }
 
         // Add product to cart
-        function addToCart(productId) {
+        function addToCart(productId, quantity = 1) {
             const product = products.find(p => p.id === productId);
             
             if (product) {
                 const existingItem = cart.find(item => item.id === productId);
                 
                 if (existingItem) {
-                    existingItem.quantity += 1;
+                    existingItem.quantity += quantity;
                 } else {
                     cart.push({
                         id: product.id,
                         name: product.name,
                         price: product.price,
-                        quantity: 1
+                        quantity: quantity
                     });
                 }
                 
