@@ -71,6 +71,7 @@
                 <button class="category-btn px-4 py-2 bg-gray-100 text-gray-800 rounded-full hover:bg-gray-200 transition">Elétrica</button>
                 <button class="category-btn px-4 py-2 bg-gray-100 text-gray-800 rounded-full hover:bg-gray-200 transition">Tintas</button>
                 <button class="category-btn px-4 py-2 bg-gray-100 text-gray-800 rounded-full hover:bg-gray-200 transition">Ferramentas</button>
+                <button class="category-btn px-4 py-2 bg-gray-100 text-gray-800 rounded-full hover:bg-gray-200 transition">Churrasqueiras</button>
             </div>
         </div>
 
