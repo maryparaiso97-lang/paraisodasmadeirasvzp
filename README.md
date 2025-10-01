@@ -236,7 +236,7 @@
             
             // Cimento e Argamassa
             { id: 1100, name: "CIMENTO CPII AZUL MONTES CLAROS", price: 39.90, category: "Cimento", unit: "SC" },
-            { id: 1101, name: "CIMENTO CSN CPII 50KG", price: 31.90, category: "Cimento", unit: "SC" },
+            { id: 1101, name: "CIMENTO CSN CPII 50KG", price: 37.90, category: "Cimento", unit: "SC" },
             { id: 1102, name: "CIMENTO LIZ VERM CPII", price: 40.00, category: "Cimento", unit: "SC" },
             { id: 1103, name: "ARGAMASSA AC-I 20 KG FASSA BORTOLO", price: 15.00, category: "Argamassa" },
             { id: 1104, name: "ARGAMASSA AC-I 20KG ALPHAVILLE", price: 15.50, category: "Argamassa" },
@@ -587,7 +587,7 @@
                 const encodedMessage = encodeURIComponent(message);
                 
                 // WhatsApp API link
-                const whatsappLink = `https://wa.me/5538999902267?text=${encodedMessage}`;
+                const whatsappLink = `https://wa.me/5538998956067?text=${encodedMessage}`;
                 
                 // Open WhatsApp in a new tab
                 window.open(whatsappLink, '_blank');
